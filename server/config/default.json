@@ -1,0 +1,5 @@
+{
+  "serverPort": 5000,
+  "dbUrl": "mongodb+srv://admin:admin@printlab.hf9srkf.mongodb.net/?retryWrites=true&w=majority",
+  "secretKey": "1234567890abcdef"
+}

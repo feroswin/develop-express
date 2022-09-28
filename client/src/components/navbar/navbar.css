@@ -1,0 +1,19 @@
+.navbar {
+    width: 100%;
+    height: 100px;
+    background: #3f5e85;
+}
+
+.navbar__container {
+    height: 100%;
+    width: 80%;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    color: #fff;
+    font-size: 20px;
+}
+
+
+

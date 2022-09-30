@@ -5,6 +5,7 @@ const bcrypt = require('bcryptjs')
 const {check, validationResult} = require('express-validator')
 const jwt = require('jsonwebtoken')
 const config = require('config')
+const authMiddleware = require('../middleware/auth.middleware')
 
 
 router.post('/registration',
@@ -31,7 +32,7 @@ router.post('/registration',
       return res.status(400).json({message:"Пользователь с таким email уже существует"})
     }
 
-    const hashPassword = await bcrypt.hash(password, 15)
+    const hashPassword = await bcrypt.hash(password, 5)
 
     const user = new User({first_name: first_name, last_name: last_name, email: email, password: hashPassword, phone: phone})
     await user.save()
@@ -68,5 +69,27 @@ router.post('/login', async (req, res) => {
       res.send({message:'Server error'})
     }
   })
+
+
+router.get('/auth', authMiddleware,async (req, res) => {
+  try {
+    const user = await User.findOne({_id: req.user.id})
+    const token = jwt.sign({id: user.id}, config.get('secretKey'), {expiresIn: '1h'})
+    return res.json({
+      token,
+      user: {
+        id: user.id,
+        first_name: user.first_name,
+        last_name: user.last_name,
+        email: user.email,
+        phone: user.phone
+
+      }
+    })
+  } catch (e) {
+    console.log(e)
+    res.send({message:'Server error'})
+  }
+})
 
 module.exports = router
